@@ -5,12 +5,18 @@
   const selectAllBtn = document.getElementById('selectAllBtn');
   const clearAllBtn = document.getElementById('clearAllBtn');
   const selectedCount = document.getElementById('selectedCount');
+  const selectedChips = document.getElementById('selectedChips');
+  const pasteBox = document.getElementById('pasteBox');
+  const pasteAddBtn = document.getElementById('pasteAddBtn');
+  const pasteRemoveBtn = document.getElementById('pasteRemoveBtn');
   const generateBtn = document.getElementById('generateBtn');
   const printBtn = document.getElementById('printBtn');
   const worksheet = document.getElementById('worksheet');
 
   const selected = new Set();
   let currentGrade = 'all';
+  let flatEntries = [];
+  let lastClickedIndex = null;
 
   function matchesSearch(entry, query) {
     if (!query) return true;
@@ -40,19 +46,40 @@
     });
 
     picker.innerHTML = '';
+    flatEntries = [];
+
     Object.keys(byGrade).sort((a, b) => a - b).forEach(grade => {
       const group = document.createElement('div');
       group.className = 'grade-group';
 
-      const title = document.createElement('div');
+      const groupEntries = byGrade[grade];
+
+      const title = document.createElement('label');
       title.className = 'grade-group-title';
-      title.textContent = `${grade}年生`;
+
+      const groupCb = document.createElement('input');
+      groupCb.type = 'checkbox';
+      syncGroupCheckbox(groupCb, groupEntries);
+      groupCb.addEventListener('change', () => {
+        groupEntries.forEach(entry => {
+          if (groupCb.checked) selected.add(entry.kanji);
+          else selected.delete(entry.kanji);
+        });
+        renderPicker();
+        refreshSelectionUI();
+      });
+
+      title.appendChild(groupCb);
+      title.appendChild(document.createTextNode(`${grade}年生`));
       group.appendChild(title);
 
       const grid = document.createElement('div');
       grid.className = 'kanji-grid';
 
-      byGrade[grade].forEach(entry => {
+      groupEntries.forEach(entry => {
+        const index = flatEntries.length;
+        flatEntries.push(entry);
+
         const item = document.createElement('label');
         item.className = 'kanji-item' + (selected.has(entry.kanji) ? ' checked' : '');
 
@@ -63,7 +90,25 @@
           if (cb.checked) selected.add(entry.kanji);
           else selected.delete(entry.kanji);
           item.classList.toggle('checked', cb.checked);
-          updateCount();
+          syncGroupCheckbox(groupCb, groupEntries);
+          refreshSelectionUI();
+        });
+
+        item.addEventListener('click', (e) => {
+          if (e.shiftKey && lastClickedIndex !== null) {
+            e.preventDefault();
+            const start = Math.min(lastClickedIndex, index);
+            const end = Math.max(lastClickedIndex, index);
+            const shouldCheck = !selected.has(entry.kanji);
+            for (let i = start; i <= end; i++) {
+              if (shouldCheck) selected.add(flatEntries[i].kanji);
+              else selected.delete(flatEntries[i].kanji);
+            }
+            renderPicker();
+            refreshSelectionUI();
+          } else {
+            lastClickedIndex = index;
+          }
         });
 
         const glyph = document.createElement('div');
@@ -88,8 +133,36 @@
     }
   }
 
+  function syncGroupCheckbox(groupCb, groupEntries) {
+    const checkedCount = groupEntries.filter(e => selected.has(e.kanji)).length;
+    groupCb.checked = checkedCount === groupEntries.length;
+    groupCb.indeterminate = checkedCount > 0 && checkedCount < groupEntries.length;
+  }
+
   function updateCount() {
     selectedCount.textContent = `${selected.size} 文字えらんでいます`;
+  }
+
+  function renderSelectedChips() {
+    const entries = KANJI_DATA.filter(entry => selected.has(entry.kanji));
+    selectedChips.innerHTML = '';
+    entries.forEach(entry => {
+      const chip = document.createElement('span');
+      chip.className = 'selected-chip';
+      chip.title = 'クリックで選択解除';
+      chip.innerHTML = `${entry.kanji}<span class="remove-x">×</span>`;
+      chip.addEventListener('click', () => {
+        selected.delete(entry.kanji);
+        renderPicker();
+        refreshSelectionUI();
+      });
+      selectedChips.appendChild(chip);
+    });
+  }
+
+  function refreshSelectionUI() {
+    updateCount();
+    renderSelectedChips();
   }
 
   gradeFilter.addEventListener('click', (e) => {
@@ -98,22 +171,45 @@
     gradeFilter.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     currentGrade = btn.dataset.grade;
+    lastClickedIndex = null;
     renderPicker();
   });
 
-  searchBox.addEventListener('input', renderPicker);
+  searchBox.addEventListener('input', () => {
+    lastClickedIndex = null;
+    renderPicker();
+  });
 
   selectAllBtn.addEventListener('click', () => {
     visibleEntries().forEach(entry => selected.add(entry.kanji));
     renderPicker();
-    updateCount();
+    refreshSelectionUI();
   });
 
   clearAllBtn.addEventListener('click', () => {
     selected.clear();
     renderPicker();
-    updateCount();
+    refreshSelectionUI();
   });
+
+  function applyPastedText(shouldAdd) {
+    const chars = Array.from(new Set(pasteBox.value.trim().split('')));
+    const known = chars.filter(ch => KANJI_DATA.some(entry => entry.kanji === ch));
+    known.forEach(ch => {
+      if (shouldAdd) selected.add(ch);
+      else selected.delete(ch);
+    });
+    const unknown = chars.filter(ch => !known.includes(ch) && ch.trim() !== '');
+    renderPicker();
+    refreshSelectionUI();
+    if (unknown.length > 0) {
+      alert(`収録されていない文字は無視しました: ${unknown.join(' ')}`);
+    }
+    pasteBox.value = '';
+  }
+
+  pasteAddBtn.addEventListener('click', () => applyPastedText(true));
+  pasteRemoveBtn.addEventListener('click', () => applyPastedText(false));
 
   function shuffle(arr) {
     const a = arr.slice();
@@ -202,5 +298,5 @@
   });
 
   renderPicker();
-  updateCount();
+  refreshSelectionUI();
 })();

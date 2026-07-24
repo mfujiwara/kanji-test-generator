@@ -126,10 +126,65 @@ h1 {
 }
 
 .grade-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: bold;
   font-size: 0.9rem;
   color: var(--accent);
   margin: 6px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #777;
+  margin: 0 0 10px;
+}
+
+.paste-toolbar {
+  align-items: flex-start;
+}
+
+#pasteBox {
+  flex: 1;
+  min-width: 220px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.selected-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.selected-chips:empty {
+  display: none;
+}
+
+.selected-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 2px 8px 2px 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.selected-chip .remove-x {
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 0.85rem;
 }
 
 .kanji-grid {
