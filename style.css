@@ -214,6 +214,16 @@ h1 {
   border-color: var(--accent);
 }
 
+.kanji-item.range-anchor {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+#rangeModeBtn.active {
+  background: #b5651d;
+  color: #fff;
+  border-color: #b5651d;
+}
+
 .kanji-item .yomi {
   font-size: 0.6rem;
   color: #666;

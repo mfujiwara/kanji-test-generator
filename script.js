@@ -9,6 +9,7 @@
   const pasteBox = document.getElementById('pasteBox');
   const pasteAddBtn = document.getElementById('pasteAddBtn');
   const pasteRemoveBtn = document.getElementById('pasteRemoveBtn');
+  const rangeModeBtn = document.getElementById('rangeModeBtn');
   const generateBtn = document.getElementById('generateBtn');
   const printBtn = document.getElementById('printBtn');
   const worksheet = document.getElementById('worksheet');
@@ -17,6 +18,8 @@
   let currentGrade = 'all';
   let flatEntries = [];
   let lastClickedIndex = null;
+  let rangeMode = false;
+  let rangeAnchorIndex = null;
 
   function matchesSearch(entry, query) {
     if (!query) return true;
@@ -81,7 +84,9 @@
         flatEntries.push(entry);
 
         const item = document.createElement('label');
-        item.className = 'kanji-item' + (selected.has(entry.kanji) ? ' checked' : '');
+        item.className = 'kanji-item'
+          + (selected.has(entry.kanji) ? ' checked' : '')
+          + (rangeMode && rangeAnchorIndex === index ? ' range-anchor' : '');
 
         const cb = document.createElement('input');
         cb.type = 'checkbox';
@@ -95,6 +100,26 @@
         });
 
         item.addEventListener('click', (e) => {
+          if (rangeMode) {
+            e.preventDefault();
+            if (rangeAnchorIndex === null) {
+              rangeAnchorIndex = index;
+              item.classList.add('range-anchor');
+            } else {
+              const start = Math.min(rangeAnchorIndex, index);
+              const end = Math.max(rangeAnchorIndex, index);
+              const shouldCheck = !selected.has(entry.kanji);
+              for (let i = start; i <= end; i++) {
+                if (shouldCheck) selected.add(flatEntries[i].kanji);
+                else selected.delete(flatEntries[i].kanji);
+              }
+              rangeAnchorIndex = null;
+              renderPicker();
+              refreshSelectionUI();
+            }
+            return;
+          }
+
           if (e.shiftKey && lastClickedIndex !== null) {
             e.preventDefault();
             const start = Math.min(lastClickedIndex, index);
@@ -172,11 +197,21 @@
     btn.classList.add('active');
     currentGrade = btn.dataset.grade;
     lastClickedIndex = null;
+    rangeAnchorIndex = null;
     renderPicker();
   });
 
   searchBox.addEventListener('input', () => {
     lastClickedIndex = null;
+    rangeAnchorIndex = null;
+    renderPicker();
+  });
+
+  rangeModeBtn.addEventListener('click', () => {
+    rangeMode = !rangeMode;
+    rangeAnchorIndex = null;
+    rangeModeBtn.classList.toggle('active', rangeMode);
+    rangeModeBtn.textContent = `範囲選択モード: ${rangeMode ? 'オン' : 'オフ'}`;
     renderPicker();
   });
 

@@ -29,9 +29,10 @@
     <div class="toolbar">
       <button id="selectAllBtn" class="btn-secondary">表示中を全部えらぶ</button>
       <button id="clearAllBtn" class="btn-secondary">えらんだ物を全部消す</button>
+      <button id="rangeModeBtn" class="chip" type="button">範囲選択モード: オフ</button>
       <span id="selectedCount" class="count">0 文字えらんでいます</span>
     </div>
-    <p class="hint">学年見出しのチェックでその学年をまとめて選択・シフトキーを押しながらクリックで範囲選択できます。</p>
+    <p class="hint" id="rangeHint">学年見出しのチェックでその学年をまとめて選択・シフトキーを押しながらクリックで範囲選択できます(PCのみ)。タブレットは「範囲選択モード」をオンにして、始点と終点を順にタップしてください。</p>
     <div class="toolbar paste-toolbar">
       <textarea id="pasteBox" placeholder="漢字を直接貼り付け・入力(例: 一二三山川)" rows="1"></textarea>
       <button id="pasteAddBtn" class="btn-secondary">この文字を追加</button>
