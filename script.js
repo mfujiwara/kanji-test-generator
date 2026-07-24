@@ -258,7 +258,6 @@
       <li class="question-item">
         <span class="question-number">${i + 1}.</span>
         <span class="question-reading">${q.reading}${showGrade ? `<span class="question-grade-tag">${q.grade}年</span>` : ''}</span>
-        <span class="answer-box"></span>
       </li>
     `).join('');
 
