@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>かんじ書き取りテスト作成</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app no-print">
+  <h1>かんじ書き取りテスト作成</h1>
+  <p class="lead">出したい漢字にチェックを入れて「テストを作成」を押すと、下にひらがな→漢字の書き取り問題が作られます。印刷して紙に書いて使ってください。</p>
+
+  <section class="panel">
+    <h2>1. 漢字をえらぶ</h2>
+    <div class="toolbar">
+      <div class="grade-filter" id="gradeFilter">
+        <button class="chip active" data-grade="all">全学年</button>
+        <button class="chip" data-grade="1">1年</button>
+        <button class="chip" data-grade="2">2年</button>
+        <button class="chip" data-grade="3">3年</button>
+        <button class="chip" data-grade="4">4年</button>
+        <button class="chip" data-grade="5">5年</button>
+        <button class="chip" data-grade="6">6年</button>
+      </div>
+      <input type="search" id="searchBox" placeholder="漢字・読みで検索">
+    </div>
+    <div class="toolbar">
+      <button id="selectAllBtn" class="btn-secondary">表示中を全部えらぶ</button>
+      <button id="clearAllBtn" class="btn-secondary">えらんだ物を全部消す</button>
+      <span id="selectedCount" class="count">0 文字えらんでいます</span>
+    </div>
+    <div id="kanjiPicker" class="kanji-picker"></div>
+  </section>
+
+  <section class="panel">
+    <h2>2. テストの設定</h2>
+    <div class="options">
+      <label>
+        1文字あたりの問題数
+        <select id="wordsPerKanji">
+          <option value="1">1問</option>
+          <option value="2" selected>2問</option>
+        </select>
+      </label>
+      <label>
+        問題の並び順
+        <select id="orderMode">
+          <option value="shuffle" selected>シャッフルする</option>
+          <option value="sequential">えらんだ順のまま</option>
+        </select>
+      </label>
+      <label class="checkbox-label">
+        <input type="checkbox" id="showFuriGrade" checked>
+        各問題に学年を小さく表示する
+      </label>
+    </div>
+    <button id="generateBtn" class="btn-primary">テストを作成する</button>
+  </section>
+
+  <section class="panel print-hint">
+    <h2>3. 印刷する</h2>
+    <p>テストを作成したら「印刷する」を押してください。最後のページは先生・保護者用の解答一覧です。答えを配らない場合は印刷範囲でそのページを外してください。</p>
+    <button id="printBtn" class="btn-primary">印刷する / PDFで保存する</button>
+  </section>
+</div>
+
+<div id="worksheet" class="worksheet"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
