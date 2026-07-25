@@ -10,6 +10,7 @@
   const pasteAddBtn = document.getElementById('pasteAddBtn');
   const pasteRemoveBtn = document.getElementById('pasteRemoveBtn');
   const rangeModeBtn = document.getElementById('rangeModeBtn');
+  const sortMode = document.getElementById('sortMode');
   const generateBtn = document.getElementById('generateBtn');
   const printBtn = document.getElementById('printBtn');
   const worksheet = document.getElementById('worksheet');
@@ -35,6 +36,24 @@
     });
   }
 
+  function sortWithinGrade(list) {
+    const arr = list.slice();
+    switch (sortMode.value) {
+      case 'reading':
+        arr.sort((a, b) => a.words[0].reading.localeCompare(b.words[0].reading, 'ja'));
+        break;
+      case 'codepoint':
+        arr.sort((a, b) => a.kanji.codePointAt(0) - b.kanji.codePointAt(0));
+        break;
+      case 'textbook':
+        arr.sort((a, b) => a.textbookOrder - b.textbookOrder);
+        break;
+      default:
+        break; // 収録順(データそのままの並び)
+    }
+    return arr;
+  }
+
   function renderPicker() {
     const query = searchBox.value.trim();
     const entries = KANJI_DATA.filter(entry => {
@@ -46,6 +65,9 @@
     entries.forEach(entry => {
       if (!byGrade[entry.grade]) byGrade[entry.grade] = [];
       byGrade[entry.grade].push(entry);
+    });
+    Object.keys(byGrade).forEach(grade => {
+      byGrade[grade] = sortWithinGrade(byGrade[grade]);
     });
 
     picker.innerHTML = '';
@@ -202,6 +224,12 @@
   });
 
   searchBox.addEventListener('input', () => {
+    lastClickedIndex = null;
+    rangeAnchorIndex = null;
+    renderPicker();
+  });
+
+  sortMode.addEventListener('change', () => {
     lastClickedIndex = null;
     rangeAnchorIndex = null;
     renderPicker();

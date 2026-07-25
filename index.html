@@ -25,6 +25,15 @@
         <button class="chip" data-grade="6">6年</button>
       </div>
       <input type="search" id="searchBox" placeholder="漢字・読みで検索">
+      <label class="sort-label">
+        ならび順
+        <select id="sortMode">
+          <option value="default">収録順</option>
+          <option value="reading">五十音順</option>
+          <option value="codepoint">文字コード順</option>
+          <option value="textbook">教科書順(光村図書)</option>
+        </select>
+      </label>
     </div>
     <div class="toolbar">
       <button id="selectAllBtn" class="btn-secondary">表示中を全部えらぶ</button>
