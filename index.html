@@ -62,17 +62,16 @@
         </select>
       </label>
       <label>
-        問題の並び順
-        <select id="orderMode">
-          <option value="shuffle" selected>シャッフルする</option>
-          <option value="sequential">えらんだ順のまま</option>
-        </select>
+        出題数
+        <input type="number" id="questionCount" min="1" placeholder="全部">
       </label>
+      <span id="poolSizeHint" class="count"></span>
       <label class="checkbox-label">
         <input type="checkbox" id="showFuriGrade" checked>
         各問題に学年を小さく表示する
       </label>
     </div>
+    <p class="hint">問題は選んだ漢字の中からランダムに出題されます。出題数を空欄にすると選んだ分すべて、数を入れるとその数だけランダムに抜き出します。</p>
     <button id="generateBtn" class="btn-primary">テストを作成する</button>
   </section>
 

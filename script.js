@@ -207,9 +207,16 @@
     });
   }
 
+  function updatePoolSizeHint() {
+    const wordsPerKanji = parseInt(document.getElementById('wordsPerKanji').value, 10);
+    const poolSize = selected.size * wordsPerKanji;
+    document.getElementById('poolSizeHint').textContent = `(最大 ${poolSize} 問ぶん)`;
+  }
+
   function refreshSelectionUI() {
     updateCount();
     renderSelectedChips();
+    updatePoolSizeHint();
   }
 
   gradeFilter.addEventListener('click', (e) => {
@@ -285,14 +292,13 @@
 
   function buildQuestions() {
     const wordsPerKanji = parseInt(document.getElementById('wordsPerKanji').value, 10);
-    const orderMode = document.getElementById('orderMode').value;
 
     const entries = KANJI_DATA.filter(entry => selected.has(entry.kanji));
-    let questions = [];
+    let pool = [];
     entries.forEach(entry => {
       const words = entry.words.slice(0, wordsPerKanji);
       words.forEach(w => {
-        questions.push({
+        pool.push({
           kanji: entry.kanji,
           grade: entry.grade,
           reading: w.reading,
@@ -301,10 +307,11 @@
       });
     });
 
-    if (orderMode === 'shuffle') {
-      questions = shuffle(questions);
-    }
-    return questions;
+    pool = shuffle(pool);
+
+    const requested = parseInt(document.getElementById('questionCount').value, 10);
+    const count = (!requested || requested <= 0) ? pool.length : Math.min(requested, pool.length);
+    return pool.slice(0, count);
   }
 
   function renderWorksheet(questions) {
@@ -345,6 +352,8 @@
     worksheet.classList.add('has-content');
     worksheet.scrollIntoView({ behavior: 'smooth' });
   }
+
+  document.getElementById('wordsPerKanji').addEventListener('change', updatePoolSizeHint);
 
   generateBtn.addEventListener('click', () => {
     const questions = buildQuestions();

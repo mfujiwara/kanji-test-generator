@@ -253,9 +253,11 @@ h1 {
   font-size: 0.9rem;
 }
 
-.options select {
+.options select,
+.options input[type="number"] {
   margin-left: 6px;
   padding: 4px 8px;
+  width: 80px;
 }
 
 .checkbox-label {
