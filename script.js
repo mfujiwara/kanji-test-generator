@@ -331,8 +331,8 @@
       </li>
     `).join('');
 
-    const answerHtml = questions.map(q => `
-      <div><span class="reading">${q.reading}</span><strong>${q.answer}</strong></div>
+    const answerHtml = questions.map((q, i) => `
+      <div><span class="answer-number">${i + 1}.</span><span class="reading">${q.reading}</span><strong>${q.answer}</strong><span class="answer-kanji">${q.kanji}</span></div>
     `).join('');
 
     worksheet.innerHTML = `

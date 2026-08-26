@@ -369,6 +369,22 @@ h1 {
   margin-right: 4px;
 }
 
+.answer-number {
+  color: #999;
+  font-size: 0.8rem;
+  margin-right: 4px;
+}
+
+.answer-kanji {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
 @media print {
   .no-print { display: none !important; }
   body { background: #fff; }
