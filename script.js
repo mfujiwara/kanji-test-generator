@@ -15,12 +15,36 @@
   const printBtn = document.getElementById('printBtn');
   const worksheet = document.getElementById('worksheet');
 
+  const STORAGE_KEY = 'kanjiTestGenerator.selectedKanji';
+
   const selected = new Set();
   let currentGrade = 'all';
   let flatEntries = [];
   let lastClickedIndex = null;
   let rangeMode = false;
   let rangeAnchorIndex = null;
+
+  function loadSelection() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return;
+      arr.forEach(k => {
+        if (KANJI_DATA.some(entry => entry.kanji === k)) selected.add(k);
+      });
+    } catch (e) {
+      // localStorageが使えない/壊れている場合は無視して未選択状態から始める
+    }
+  }
+
+  function saveSelection() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(selected)));
+    } catch (e) {
+      // プライベートブラウジング等で保存できない場合は諦める
+    }
+  }
 
   function matchesSearch(entry, query) {
     if (!query) return true;
@@ -217,6 +241,7 @@
     updateCount();
     renderSelectedChips();
     updatePoolSizeHint();
+    saveSelection();
   }
 
   gradeFilter.addEventListener('click', (e) => {
@@ -381,6 +406,7 @@
     window.print();
   });
 
+  loadSelection();
   renderPicker();
   refreshSelectionUI();
 })();
