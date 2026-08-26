@@ -383,6 +383,18 @@ h1 {
   border-radius: 4px;
   font-size: 0.8rem;
   color: var(--accent);
+  cursor: pointer;
+  user-select: none;
+}
+
+.answer-kanji:hover {
+  background: var(--accent-light);
+}
+
+.answer-kanji.deselected {
+  color: #999;
+  border-color: #ccc;
+  text-decoration: line-through;
 }
 
 @media print {

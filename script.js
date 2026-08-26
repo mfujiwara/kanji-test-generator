@@ -332,7 +332,7 @@
     `).join('');
 
     const answerHtml = questions.map((q, i) => `
-      <div><span class="answer-number">${i + 1}.</span><span class="reading">${q.reading}</span><strong>${q.answer}</strong><span class="answer-kanji">${q.kanji}</span></div>
+      <div><span class="answer-number">${i + 1}.</span><span class="reading">${q.reading}</span><strong>${q.answer}</strong><span class="answer-kanji" data-kanji="${q.kanji}" title="クリックで出題対象から外す/戻す">${q.kanji}</span></div>
     `).join('');
 
     worksheet.innerHTML = `
@@ -352,6 +352,19 @@
     worksheet.classList.add('has-content');
     worksheet.scrollIntoView({ behavior: 'smooth' });
   }
+
+  worksheet.addEventListener('click', (e) => {
+    const tag = e.target.closest('.answer-kanji');
+    if (!tag) return;
+    const kanji = tag.dataset.kanji;
+    if (selected.has(kanji)) selected.delete(kanji);
+    else selected.add(kanji);
+    renderPicker();
+    refreshSelectionUI();
+    worksheet.querySelectorAll('.answer-kanji').forEach(el => {
+      if (el.dataset.kanji === kanji) el.classList.toggle('deselected', !selected.has(kanji));
+    });
+  });
 
   document.getElementById('wordsPerKanji').addEventListener('change', updatePoolSizeHint);
 
