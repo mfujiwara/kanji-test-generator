@@ -356,6 +356,13 @@ h1 {
   padding-left: 10px;
 }
 
+.answer-bulk-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
 .answer-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

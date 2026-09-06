@@ -369,6 +369,10 @@
       <ul class="question-list">${listHtml}</ul>
       <div class="answer-page">
         <h3>解答一覧(先生・保護者用)</h3>
+        <div class="answer-bulk-toolbar no-print">
+          <button type="button" class="btn-secondary" data-bulk-action="select-all">この一覧の漢字を全部えらぶ</button>
+          <button type="button" class="btn-secondary" data-bulk-action="deselect-all">この一覧の漢字を全部除外する</button>
+        </div>
         <div class="answer-grid">${answerHtml}</div>
       </div>
     `;
@@ -377,6 +381,22 @@
   }
 
   worksheet.addEventListener('click', (e) => {
+    const bulkBtn = e.target.closest('[data-bulk-action]');
+    if (bulkBtn) {
+      const shouldSelect = bulkBtn.dataset.bulkAction === 'select-all';
+      const kanjiTags = worksheet.querySelectorAll('.answer-kanji');
+      kanjiTags.forEach(el => {
+        if (shouldSelect) selected.add(el.dataset.kanji);
+        else selected.delete(el.dataset.kanji);
+      });
+      renderPicker();
+      refreshSelectionUI();
+      kanjiTags.forEach(el => {
+        el.classList.toggle('deselected', !selected.has(el.dataset.kanji));
+      });
+      return;
+    }
+
     const tag = e.target.closest('.answer-kanji');
     if (!tag) return;
     const kanji = tag.dataset.kanji;
