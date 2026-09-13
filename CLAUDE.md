@@ -66,5 +66,5 @@
 
 ## デプロイ
 
-- git init・GitHubリポジトリ作成・pushは未実施(2026-07-25時点、ユーザーの意向で保留)。手順は `README.md` に記載済み
-- 進める際はSettings → Pages → Deploy from branch (main / root) でOK、ビルドステップ不要
+- GitHubリポジトリ(`git@github.com:mfujiwara/kanji-test-generator.git`)作成・push済み(2026-09-13時点)
+- GitHub Pages公開設定はSettings → Pages → Deploy from branch (main / root) でOK、ビルドステップ不要
