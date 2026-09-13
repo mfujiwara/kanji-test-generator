@@ -475,7 +475,7 @@ const KANJI_DATA = [
   { kanji: '街', grade: 4, textbookOrder: 116, words: [ { reading: 'まちなみ', answer: '街並み' }, { reading: 'がいろじゅ', answer: '街路樹' } ] },
   { kanji: '各', grade: 4, textbookOrder: 152, words: [ { reading: 'かくじ', answer: '各自' }, { reading: 'かっこく', answer: '各国' } ] },
   { kanji: '覚', grade: 4, textbookOrder: 200, words: [ { reading: 'おぼえる', answer: '覚える' }, { reading: 'かんかく', answer: '感覚' } ] },
-  { kanji: '潟', grade: 4, textbookOrder: 36, words: [ { reading: 'にいがたけん', answer: '新潟県' }, { reading: 'にいがた', answer: '新潟' }, { reading: 'かんがた', answer: '干潟' } ] },
+  { kanji: '潟', grade: 4, textbookOrder: 36, words: [ { reading: 'にいがたけん', answer: '新潟県' }, { reading: 'にいがた', answer: '新潟' }, { reading: 'ひがた', answer: '干潟' } ] },
   { kanji: '完', grade: 4, textbookOrder: 183, words: [ { reading: 'かんぺき', answer: '完璧' }, { reading: 'かんりょう', answer: '完了' } ] },
   { kanji: '官', grade: 4, textbookOrder: 77, words: [ { reading: 'けいさつかん', answer: '警察官' }, { reading: 'しょうぼうかん', answer: '消防官' } ] },
   { kanji: '管', grade: 4, textbookOrder: 181, words: [ { reading: 'くだ', answer: '管' }, { reading: 'ほかんこ', answer: '保管庫' } ] },
